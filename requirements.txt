@@ -8,3 +8,4 @@ pyrfr>=0.8.0
 sobol_seq
 joblib
 lazy_import
+HPOlib2
