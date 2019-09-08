@@ -9,3 +9,4 @@ sobol_seq
 joblib
 lazy_import
 HPOlib2
+scikit-optimize
