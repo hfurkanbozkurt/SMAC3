@@ -36,8 +36,8 @@ class SMAC4RL(SMAC4AC, Env):
                  action_repeat=1,
                  model_type="gp",
                  acquisition_function="AdaptiveLCB",
-                 seed=None,
                  verbose="ERROR",
+                 seed=None,
                  **kwargs):
         self.obs_space = obs_space
         self.act_space = act_space
@@ -206,7 +206,7 @@ class SMAC4RL(SMAC4AC, Env):
             kwargs['model'] = model_class
             model_kwargs['kernel'] = kernel
             model_kwargs['normalize_y'] = True
-            model_kwargs['seed'] = self.seed or rng.randint(0, 2 ** 20)
+            model_kwargs['seed'] = rng.randint(0, 2 ** 20)
         elif self.model_type == "gp_mcmc":
             model_class = GaussianProcessMCMC
             kwargs['model'] = model_class
@@ -221,7 +221,7 @@ class SMAC4RL(SMAC4AC, Env):
             model_kwargs['chain_length'] = 250
             model_kwargs['burnin_steps'] = 250
             model_kwargs['normalize_y'] = True
-            model_kwargs['seed'] = self.seed or rng.randint(0, 2**20)
+            model_kwargs['seed'] = rng.randint(0, 2**20)
         else:
             raise ValueError('Unknown model type %s' % kwargs["model_type"])
         kwargs['model_kwargs'] = model_kwargs

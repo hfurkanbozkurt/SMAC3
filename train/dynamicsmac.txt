@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH -p meta_gpu-black
+#SBATCH -p cpu_ivy
 #SBATCH --mem 32000
 #SBATCH -t 7-00:00
 #SBATCH -c 2
@@ -14,7 +14,7 @@ source activate the
 
 if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
@@ -23,32 +23,32 @@ if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
         --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 
 if [ 2 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
         --benchmark branin \
-        --horizon 15 \
-        --action_repeat 30 \
+        --horizon 30 \
+        --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 
 if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
@@ -57,14 +57,14 @@ if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
         --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
@@ -73,14 +73,14 @@ if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
         --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
@@ -89,32 +89,32 @@ if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
         --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 
 if [ 6 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
         --benchmark camelback \
-        --horizon 15 \
-        --action_repeat 30 \
+        --horizon 30 \
+        --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 
 if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
@@ -123,14 +123,14 @@ if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
         --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi
 
 if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/tabular_q.py \
-        --num_episodes 10000 \
+        --num_episodes 1000 \
         --obs_space budget \
         --act_space exploration_weight \
         --reward_fun dense_inc_perf_improvement \
@@ -139,7 +139,7 @@ if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
         --action_repeat 3 \
         --acquisition_function AdaptiveLCB \
         -l 1.0 \
-        --num_checkpoints 3 \
-        --learning_starts 1000
+        --num_checkpoints 10 \
+        --learning_starts 100
     exit $?
 fi

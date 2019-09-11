@@ -107,7 +107,7 @@ def get_decay_schedule(start_val: float, decay_start: int, num_episodes: int, ty
     return schedule
 
 
-def greedy_eval_Q(Q: QTable, this_environment, nevaluations: int = 1):
+def greedy_eval_Q(Q: QTable, this_environment, nevaluations: int = 1, print_actions=False):
     """
     Evaluate Q function greediely with epsilon=0
 
@@ -122,6 +122,8 @@ def greedy_eval_Q(Q: QTable, this_environment, nevaluations: int = 1):
         while True:  # roll out episode
             evaluation_action = np.random.choice(list(range(this_environment.action_space.n)),
                                                  p=greedy(evaluation_state))
+            if print_actions:
+                print(evaluation_action)
             s_, evaluation_reward, evaluation_done, _ = this_environment.step(evaluation_action)
             cummulative_reward += evaluation_reward
             episode_length += 1
@@ -161,6 +163,7 @@ def train_q_learning(
     env_fn,
     env_config,
     checkpoints,
+    fn,
     num_episodes: int,
     discount_factor: float = 1.0,
     alpha: float = 0.5,
@@ -202,6 +205,8 @@ def train_q_learning(
 
     epsilon_schedule = get_decay_schedule(epsilon, decay_starts, num_episodes, epsilon_decay, learning_starts)
 
+    checkpoints = np.append(checkpoints, num_episodes)
+
     checkpoint_q_vals = {}
     for i_episode in range(num_episodes):
 
@@ -218,7 +223,7 @@ def train_q_learning(
                 test_stats.expected_rewards[i_episode] = test_expected_reward
                 test_stats.episode_lengths[i_episode] = test_episode_length
         train_reward, train_expected_reward, train_episode_length = greedy_eval_Q(
-            Q, environment, nevaluations=number_of_evaluations)
+            Q, environment, nevaluations=number_of_evaluations, print_actions=((i_episode + 1) in checkpoints))
         train_stats.episode_rewards[i_episode] = train_reward
         train_stats.expected_rewards[i_episode] = train_expected_reward
         train_stats.episode_lengths[i_episode] = train_episode_length
@@ -226,6 +231,13 @@ def train_q_learning(
 
         if i_episode + 1 in checkpoints:
             checkpoint_q_vals[i_episode] = copy.deepcopy(Q)
+            results = {
+                "checkpoint_q_vals": {k: dict(v) for k, v in checkpoint_q_vals.items()},
+                "episode_rewards": train_stats.episode_rewards,
+            }
+
+            with open(fn.replace("ch_0", f"ch_{i_episode + 1}"), 'wb') as fh:
+                pickle.dump(results, fh)
 
     return checkpoint_q_vals, (test_stats, train_stats)
 
@@ -340,6 +352,9 @@ if __name__ == "__main__":
         seed=args.seed,
     )
 
+    t = str(datetime.datetime.now()).replace(" ", "_")
+    fn = f"{args.epsilon}-greedy-results-smac-{args.num_episodes}_eps-seed_args-{args.seed}_seed-{args.benchmark}-{t}-ch_0.pkl"
+
     agent_config = dict(
         checkpoints=checkpoints,
         num_episodes=args.num_episodes,
@@ -350,6 +365,7 @@ if __name__ == "__main__":
         epsilon_decay=args.eps_schedule,
         decay_starts=args.eps_decay_starts,
         learning_starts=args.learning_starts,
+        fn=fn,
     )
 
     pprint(env_config)
@@ -360,13 +376,3 @@ if __name__ == "__main__":
         env_config=env_config,
         **agent_config,
     )
-
-    results = {
-        "checkpoint_q_vals": {k: dict(v) for k, v in checkpoint_q_vals.items()},
-        "episode_rewards": train_stats.episode_rewards,
-    }
-
-    t = str(datetime.datetime.now()).replace(" ", "_")
-    fn = f"{args.epsilon}-greedy-results-smac-{args.num_episodes}_eps-seed_args-{args.seed}_seed-{args.benchmark}-{t}.pkl"
-    with open(fn, 'wb') as fh:
-        pickle.dump(results, fh)
