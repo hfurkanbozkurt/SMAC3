@@ -175,6 +175,55 @@ class SMBO(object):
         if not self.incumbent:
             self.incumbent = self.scenario.cs.get_default_configuration()
 
+    def run_step(self, num_steps=1):
+        """Runs the Bayesian optimization loop for <num_steps> step
+
+        Returns
+        ----------
+        incumbent: np.array(1, H)
+            The best found configuration
+        """
+        # Main BO step
+        for _ in range(num_steps):
+            if self.scenario.shared_model:
+                pSMAC.read(run_history=self.runhistory,
+                           output_dirs=self.scenario.input_psmac_dirs,
+                           configuration_space=self.config_space,
+                           logger=self.logger)
+
+            start_time = time.time()
+            X, Y = self.rh2EPM.transform(self.runhistory)
+
+            # get all found configurations sorted according to acq
+            challengers = self.choose_next(X, Y)
+
+            time_spent = time.time() - start_time
+            time_left = self._get_timebound_for_intensification(time_spent)
+
+            self.logger.debug("Intensify")
+
+            self.incumbent, inc_perf = self.intensifier.intensify(
+                challengers=challengers,
+                incumbent=self.incumbent,
+                run_history=self.runhistory,
+                aggregate_func=self.aggregate_func,
+                time_bound=max(self.intensifier._min_time, time_left))
+
+            if self.scenario.shared_model:
+                pSMAC.write(run_history=self.runhistory,
+                            output_directory=self.scenario.output_dir_for_this_run,
+                            logger=self.logger)
+
+            logging.debug("Remaining budget: %f (wallclock), %f (ta costs), %f (target runs)" % (
+                self.stats.get_remaing_time_budget(),
+                self.stats.get_remaining_ta_budget(),
+                self.stats.get_remaining_ta_runs()))
+
+            if self.stats.is_budget_exhausted():
+                break
+
+            self.stats.print_stats(debug_out=True)
+
     def run(self):
         """Runs the Bayesian optimization loop
 
