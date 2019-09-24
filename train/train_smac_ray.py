@@ -56,7 +56,7 @@ def logger_creator(config, model='PPO', adp='adp1', seed=0):
 
 def setup_ray(args, env_choice):
     ray.init(ignore_reinit_error=True, num_cpus=1, num_gpus=0, object_store_memory=int(4e+9),
-             temp_dir='./ray_tmp')
+             temp_dir='./ray_tmp_{}'.format(str(datetime.datetime.now()).replace(" ", "_")))
 
     register_env('smac_env', env_choice.env_creator)
     ray_conf = ray_dqn.DEFAULT_CONFIG.copy()
