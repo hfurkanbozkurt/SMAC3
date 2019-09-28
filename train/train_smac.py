@@ -246,7 +246,7 @@ def train_q_learning(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser('Tabular Q-learning')
     parser.add_argument('--agent',
-                        choices=["tabular_q", "deep_q"],
+                        choices=["tabular_q", "deep_q", "default_smac", "random"],
                         default="tabular_q")
     parser.add_argument('--num_episodes',
                         help='Number of episodes to roll out',
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     pprint(env_config)
 
     t = str(datetime.datetime.now()).replace(" ", "_")
-    fn = f"{args.epsilon}-greedy-results-{args.agent}-{args.num_episodes}_eps-{args.bench}-{t}-ch_0.pkl"
+    fn = f"{args.agent}-{args.bench}-{args.lr}-{args.num_episodes}-{t}.pkl"
 
     if args.agent == "tabular_q":
         if args.num_checkpoints == 1:
@@ -332,7 +332,45 @@ if __name__ == "__main__":
         conf['env_config'] = env_config
         pprint(conf)
         agent = ray_dqn.DQNAgent(config=conf, env='smac_env', logger_creator=log_creator)
-        ray_dqn_learn(args.num_episodes, agent, c_freq=(args.num_episodes - 1)//args.num_checkpoints)
+        stats = ray_dqn_learn(args.num_episodes, agent, c_freq=(args.num_episodes - 1)//args.num_checkpoints)
         agent.save()
-        with open(fn.replace('results', 'stats'), 'wb') as fh:
-            pickle.dump(stats.episode_rewards[:args.num_episodes], fh)
+        with open(fn, 'wb') as fh:
+            pickle.dump(stats, fh)
+    elif args.agent == "default_smac":
+        env = RLSMAC.env_creator(env_config)
+        rewards = []
+        inc_perfs = []
+        for i in range(args.num_episodes):
+            rew = 0.0
+            inc_perf = 0.0
+            ob = env.reset_to_default()
+            while True:
+                ob, r, done, info = env.step(0)
+                rew += r
+                inc_perf = info["perf_^"]
+                if done:
+                    break
+            rewards.append(rew)
+            inc_perfs.append(inc_perf)
+        stats = {"rewards": rewards, "inc_perfs": inc_perfs}
+        with open(fn, 'wb') as fh:
+            pickle.dump(stats, fh)
+    elif args.agent == "random":
+        env = RLSMAC.env_creator(env_config)
+        rewards = []
+        inc_perfs = []
+        for i in range(args.num_episodes):
+            rew = 0.0
+            inc_perf = 0.0
+            ob = env.reset()
+            while True:
+                ob, r, done, info = env.step(env.action_space.sample())
+                rew += r
+                inc_perf = info["perf_^"]
+                if done:
+                    break
+            rewards.append(rew)
+            inc_perfs.append(inc_perf)
+        stats = {"rewards": rewards, "inc_perfs": inc_perfs}
+        with open(fn, 'wb') as fh:
+            pickle.dump(stats, fh)

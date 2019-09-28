@@ -11,7 +11,7 @@ from smac.facade.smac_ac_facade import SMAC4AC
 from smac.facade.smac_bo_facade import SMAC4BO
 from smac.facade.smac_hpo_facade import SMAC4HPO
 from smac.scenario.scenario import Scenario
-from smac.optimizer.acquisition import AdaptiveLCB
+from smac.optimizer.acquisition import AdaptiveLCB, LCB
 
 
 class RLSMAC(gym.Env):
@@ -109,7 +109,7 @@ class RLSMAC(gym.Env):
         scenario = Scenario({
             "run_obj": "quality",
             "deterministic": "true",
-            "runcount-limit": 2 * self.horizon,
+            "runcount-limit": self.horizon,
             "cs": self.bench.get_configuration_space(),
         })
         scenario.output_dir = ""
@@ -117,6 +117,22 @@ class RLSMAC(gym.Env):
         kwargs["tae_runner"] = self.bench()
         kwargs["acquisition_function"] = AdaptiveLCB
         return kwargs
+
+    def reset_to_default(self):
+        # We initialize solver and start it manually, i.e., run initial design
+        kwargs = self.modify_kwargs(self.kwargs)
+        # We use LCB so that actions do not change anything.
+        kwargs["acquisition_function"] = LCB
+        kwargs["acquisition_function"]._set_exploration_weight = lambda x, y: x
+        self.smac = self.mode(**kwargs)
+        self.smac.solver.start()
+        self.t = 0
+        # We do not want budget to exhaust, we want to use our own version of
+        # budget in terms of number of steps.
+        self.smac.solver.stats.is_budget_exhausted = lambda: False
+
+        self.state = []
+        return self.state
 
     def optimize(self) -> None:
         self.smac = self.mode(**self.modify_kwargs(self.kwargs))

@@ -65,7 +65,12 @@ def setup_ray(args, env_choice):
         episode_rewards=[],
         expected_rewards=np.zeros(args.num_episodes))
 
-    h = args.horizon
+    def on_episode_end(info):
+        episode = info["episode"]
+        inc_perf = episode.last_info_for('agent0')["perf_^"]
+        episode.custom_metrics["inc_perf"] = inc_perf
+
+    h = args.horizon // args.act_repeat
     ray_conf["hiddens"] = [50]
     ray_conf["gamma"] = args.discount_factor
     ray_conf["lr"] = args.lr
@@ -82,18 +87,27 @@ def setup_ray(args, env_choice):
     ray_conf['horizon'] = h + 1
     ray_conf['evaluation_interval'] = 10
     ray_conf['evaluation_num_episodes'] = 1
+    ray_conf['callbacks'] = {
+        "on_episode_end": function(on_episode_end)
+    }
     return ray_conf, test_stats
 
 
 def ray_dqn_learn(num_eps, agent, c_freq=10):
     total_eps = 0
+    rewards = []
+    inc_perfs = []
     while total_eps <= num_eps:
         print("{}/{}".format(total_eps, num_eps))
         train_result = agent.train()
         total_eps += train_result['episodes_this_iter']
+        rewards.append(train_result["episode_reward_mean"])
+        inc_perfs.append(train_result["custom_metrics"]["inc_perf_mean"])
         if total_eps % c_freq == 0:
             pprint(train_result)
             agent.save()
+    stats = {"rewards": rewards, "inc_perfs": inc_perfs}
+    return stats
 
 
 def restore(param_path, checkpoint_path, env_id):
