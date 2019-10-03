@@ -47,7 +47,8 @@ if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent default_smac \
         --num_episodes 10000 \
-        --bench camelback
+        --bench camelback \
+        --verbose INFO
     exit $?
 fi
 
@@ -85,7 +86,8 @@ if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent default_smac \
         --num_episodes 10000 \
-        --bench goldsteinprice
+        --bench goldsteinprice \
+        --verbose INFO
     exit $?
 fi
 
@@ -123,7 +125,8 @@ if [ 12 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent default_smac \
         --num_episodes 10000 \
-        --bench hartmann3
+        --bench hartmann3 \
+        --verbose INFO
     exit $?
 fi
 
@@ -161,6 +164,7 @@ if [ 16 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent default_smac \
         --num_episodes 10000 \
-        --bench hartmann6
+        --bench hartmann6 \
+        --verbose INFO
     exit $?
 fi
