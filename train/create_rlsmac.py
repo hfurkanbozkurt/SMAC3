@@ -31,10 +31,10 @@ def create_surrogate(task_id):
 
 def run(cluster):
     agents = [
-        {"agent": "deep_q", "lr": 0.01, "eps_decay_starts": 500, "num_checkpoints": 10},
-        {"agent": "deep_q", "lr": 0.001, "eps_decay_starts": 500, "num_checkpoints": 10},
+        {"agent": "deep_q", "lr": 0.01, "eps_decay_starts": 250, "num_checkpoints": 10},
+        {"agent": "deep_q", "lr": 0.001, "eps_decay_starts": 250, "num_checkpoints": 10},
         {"agent": "random"},
-        {"agent": "default_smac", "verbose": "INFO"},
+        {"agent": "default_smac"},
     ]
 
     bench = [
@@ -45,7 +45,9 @@ def run(cluster):
     ]
 
     defaults = {
-        "num_episodes": 10000,
+        "num_episodes": 2000,
+        "horizon": 75,
+        "act": "acquisition_func",
     }
 
     header = [
@@ -54,10 +56,10 @@ def run(cluster):
         "#SBATCH --mem 32000",
         "#SBATCH -t 7-00:00",
         "#SBATCH -c 2",
-        "#SBATCH -a 1-16 # array size",
+        "#SBATCH -a 1-{}".format(len(bench) * len(agents)),
         "#SBATCH -D /home/bozkurth/git/thesis/SMAC3/train",
-        "#SBATCH -o log/%x.%N.%A.%a.out",
-        "#SBATCH -e log/%x.%N.%A.%aerr",
+        "#SBATCH -o log_acq_fun/%x.%N.%A.%a.out",
+        "#SBATCH -e log_acq_fun/%x.%N.%A.%aerr",
         "#SBATCH --mail-type=END,FAIL",
         "",
         "source activate the",

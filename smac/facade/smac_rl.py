@@ -10,8 +10,8 @@ from smac.configspace import convert_configurations_to_array
 from smac.facade.smac_ac_facade import SMAC4AC
 from smac.facade.smac_bo_facade import SMAC4BO
 from smac.facade.smac_hpo_facade import SMAC4HPO
+from smac.optimizer.acquisition import EI, LCB, PI, AdaptiveLCB, LogEI
 from smac.scenario.scenario import Scenario
-from smac.optimizer.acquisition import AdaptiveLCB, LCB
 
 
 class RLSMAC(gym.Env):
@@ -62,6 +62,7 @@ class RLSMAC(gym.Env):
         action_spaces = {
             "binary_random_prob": (self.apply_binary_random_prob, 2),
             "random_prob": (self.apply_random_prob, 21),
+            "acquisition_func": (self.apply_acquisition_func, 4),
             "exploration_weight": (self.apply_exploration_weight, 20),
         }
         self.apply_action = action_spaces[self.act][0]
@@ -74,6 +75,8 @@ class RLSMAC(gym.Env):
         self.get_reward = reward_functions[self.rew]
 
         logging.getLogger().setLevel(verbose)
+        self.num_resets = -1
+        self.num_steps = 0
 
     def step(self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
         # Apply action
@@ -91,6 +94,8 @@ class RLSMAC(gym.Env):
                 self.smac.solver.intensifier.traj_logger.trajectory[-1].train_perf),
             "t": self.t,
         }
+        print(f"rew: {self.reward}, perf_^: {self.info['perf_^']}, perf_*: {self.info['perf_*']}")
+        self.num_steps += 1
         return self.state, self.reward, self.done, self.info
 
     def reset(self) -> np.ndarray:
@@ -103,6 +108,8 @@ class RLSMAC(gym.Env):
         self.smac.solver.stats.is_budget_exhausted = lambda: False
 
         self.state = np.hstack([get_obs() for get_obs in self.get_observation])
+        self.num_resets += 1
+        self.num_steps = 0
         return self.state
 
     def modify_kwargs(self, kwargs: Dict) -> Dict:
@@ -115,7 +122,8 @@ class RLSMAC(gym.Env):
         scenario.output_dir = ""
         kwargs["scenario"] = scenario
         kwargs["tae_runner"] = self.bench()
-        kwargs["acquisition_function"] = AdaptiveLCB
+        if not self.act == "acquisition_func":
+            kwargs["acquisition_function"] = AdaptiveLCB
         return kwargs
 
     def reset_to_default(self):
@@ -132,6 +140,8 @@ class RLSMAC(gym.Env):
         self.smac.solver.stats.is_budget_exhausted = lambda: False
 
         self.state = []
+        self.num_resets += 1
+        self.num_steps = 0
         return self.state
 
     def optimize(self) -> None:
@@ -181,13 +191,32 @@ class RLSMAC(gym.Env):
     # Action Functions
     # -------------------------------------------------------------------------
     def apply_binary_random_prob(self, action: int) -> None:
+        init_val = self.smac.solver.random_configuration_chooser.prob
         self.smac.solver.random_configuration_chooser.prob = float(action)
+        print(f"R/S: {self.num_resets}/{self.num_steps}, binary_random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
 
     def apply_random_prob(self, action: int) -> None:
+        init_val = self.smac.solver.random_configuration_chooser.prob
         self.smac.solver.random_configuration_chooser.prob = action / 20.0
+        print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
+
+    def apply_acquisition_func(self, action: int) -> None:
+        init_val = self.smac.solver.acquisition_func
+        model =  self.smac.solver.acquisition_func.model
+        acq_func = {0: EI, 1: LCB, 2: PI, 3: LogEI}[action]
+        acquisition_function = acq_func(model)
+        self.smac.solver.acquisition_func = acquisition_function
+        self.smac.solver.acq_optimizer.acquisition_function = acquisition_function
+        if hasattr(self.smac.solver.acq_optimizer, "local_search"):
+            self.smac.solver.acq_optimizer.local_search.acquisition_function = acquisition_function
+        if hasattr(self.smac.solver.acq_optimizer, "random_search"):
+            self.smac.solver.acq_optimizer.random_search.acquisition_function = acquisition_function
+        print(f"R/S: {self.num_resets}/{self.num_steps}, acquisition_func: {init_val} --> {self.smac.solver.acquisition_func}")
 
     def apply_exploration_weight(self, action: int) -> None:
+        init_val = self.smac.solver.acquisition_func.exploration_weight
         self.smac.solver.acquisition_func._set_exploration_weight(action)
+        print(f"R/S: {self.num_resets}/{self.num_steps}, exploration_weight: {init_val} --> {self.smac.solver.acquisition_func.exploration_weight}")
 
     # -------------------------------------------------------------------------
     # Reward Functions

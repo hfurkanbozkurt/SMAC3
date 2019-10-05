@@ -3,168 +3,179 @@
 #SBATCH --mem 32000
 #SBATCH -t 7-00:00
 #SBATCH -c 2
-#SBATCH -a 1-16 # array size
+#SBATCH -a 1-16
 #SBATCH -D /home/bozkurth/git/thesis/SMAC3/train
-#SBATCH -o log/%x.%N.%A.%a.out # STDOUT  (the folder log has to exist) %A will be replaced by the SLURM_ARRAY_JOB_ID value, whilst %a will be replaced by the SLURM_ARRAY_TASK_ID
-#SBATCH -e log/%x.%N.%A.%a.err # STDERR  (the folder log has to exist) %A will be replaced by the SLURM_ARRAY_JOB_ID value, whilst %a will be replaced by the SLURM_ARRAY_TASK_ID
+#SBATCH -o log/%x.%N.%A.%a.out
+#SBATCH -e log/%x.%N.%A.%aerr
 #SBATCH --mail-type=END,FAIL
 
-# Activate virtual env so that run_experiment can load the correct packages
 source activate the
-
 
 if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench camelback \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.01 \
-        --bench camelback
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 2 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench camelback \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.001 \
-        --bench camelback
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 10000 \
-        --bench camelback
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench camelback \
+        --agent random
     exit $?
 fi
-
 if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent default_smac \
-        --num_episodes 10000 \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
         --bench camelback \
-        --verbose INFO
+        --agent default_smac
     exit $?
 fi
-
 if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench goldsteinprice \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.01 \
-        --bench goldsteinprice
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 6 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench goldsteinprice \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.001 \
-        --bench goldsteinprice
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 10000 \
-        --bench goldsteinprice
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench goldsteinprice \
+        --agent random
     exit $?
 fi
-
 if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent default_smac \
-        --num_episodes 10000 \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
         --bench goldsteinprice \
-        --verbose INFO
+        --agent default_smac
     exit $?
 fi
-
 if [ 9 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench hartmann3 \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.01 \
-        --bench hartmann3
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 10 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench hartmann3 \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.001 \
-        --bench hartmann3
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 11 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 10000 \
-        --bench hartmann3
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench hartmann3 \
+        --agent random
     exit $?
 fi
-
 if [ 12 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent default_smac \
-        --num_episodes 10000 \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
         --bench hartmann3 \
-        --verbose INFO
+        --agent default_smac
     exit $?
 fi
-
 if [ 13 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench hartmann6 \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.01 \
-        --bench hartmann6
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 14 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench hartmann6 \
         --agent deep_q \
-        --num_episodes 10000 \
-        --eps_decay_starts 500 \
-        --num_checkpoints 10 \
         --lr 0.001 \
-        --bench hartmann6
+        --eps_decay_starts 250 \
+        --num_checkpoints 10
     exit $?
 fi
-
 if [ 15 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 10000 \
-        --bench hartmann6
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
+        --bench hartmann6 \
+        --agent random
     exit $?
 fi
-
 if [ 16 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent default_smac \
-        --num_episodes 10000 \
+        --num_episodes 2000 \
+        --horizon 75 \
+        --act acquisition_func \
         --bench hartmann6 \
-        --verbose INFO
+        --agent default_smac
     exit $?
 fi
