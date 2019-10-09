@@ -71,9 +71,9 @@ def setup_ray(args, env_choice):
         episode.custom_metrics["inc_perf"] = inc_perf
 
     h = args.horizon // args.act_repeat
-    ray_conf["hiddens"] = [50]
-    ray_conf["gamma"] = args.discount_factor
-    ray_conf["lr"] = args.lr
+    ray_conf['hiddens'] = [100, 100]
+    ray_conf['gamma'] = args.discount_factor
+    ray_conf['lr'] = args.lr
     ray_conf['train_batch_size'] = h * 4
     ray_conf['sample_batch_size'] = h
     ray_conf['timesteps_per_iteration'] = h
@@ -83,6 +83,7 @@ def setup_ray(args, env_choice):
     ray_conf['train_batch_size'] = h
     ray_conf['sample_batch_size'] = h
     ray_conf['schedule_max_timesteps'] = args.num_episodes * h
+    ray_conf['exploration_fraction'] = 0.25
     ray_conf['learning_starts'] = args.eps_decay_starts
     ray_conf['horizon'] = h + 1
     ray_conf['evaluation_interval'] = 10
