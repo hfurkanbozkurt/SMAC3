@@ -43,6 +43,8 @@ class RLSMAC(gym.Env):
 
         self.mode = {"AC": SMAC4AC, "BO": SMAC4BO, "HPO": SMAC4HPO}[self.mode]
         self.bench = synthetic_benchmarks[self.bench]
+        if not isinstance(self.obs, list):
+            self.obs = [self.obs]
 
         # Define observation space and functions to retrieve observation
         observation_spaces = {
@@ -50,6 +52,7 @@ class RLSMAC(gym.Env):
             "incumbent_changes": (self.get_incumbent_changes, 1),
             "not_improved_since": (self.get_not_improved_since, 1),
             "incumbent_performance_prediction_error": (self.get_incumbent_performance_prediction_error, 1),
+            "rsaps": (self.get_rsaps, 2),
         }
         self.get_observation = [observation_spaces[obs][0] for obs in self.obs]
         self.observation_space = gym.spaces.Box(
@@ -71,6 +74,7 @@ class RLSMAC(gym.Env):
         # Define reward function
         reward_functions = {
             "incumbent_performance": self.incumbent_performance_reward,
+            "rsaps": self.rsaps_reward,
         }
         self.get_reward = reward_functions[self.rew]
 
@@ -130,8 +134,6 @@ class RLSMAC(gym.Env):
         # We initialize solver and start it manually, i.e., run initial design
         kwargs = self.modify_kwargs(self.kwargs)
         # We use LCB so that actions do not change anything.
-        kwargs["acquisition_function"] = LCB
-        kwargs["acquisition_function"]._set_exploration_weight = lambda x, y: x
         self.smac = self.mode(**kwargs)
         self.smac.solver.start()
         self.t = 0
@@ -187,6 +189,26 @@ class RLSMAC(gym.Env):
 
         return error
 
+    def get_rsaps(self) -> float:
+        rh = self.smac.solver.runhistory.data
+        rh_step_cutoff = min(self.act_repeat, len(rh))
+        rh_keys = []
+        rh_vals = []
+        for key, val in rh.items():
+            rh_keys.append(self.smac.solver.runhistory.ids_config[key.config_id])
+            rh_vals.append(val.cost)
+        f_step = np.mean(rh_vals[-rh_step_cutoff:])
+        f_bsf = np.min(rh_vals[:-rh_step_cutoff])
+        delta_f = f_step - f_bsf
+
+        config_distance = 0.0
+        config_before = rh_keys[-rh_step_cutoff-1].get_array()
+        for current_config in rh_keys[-rh_step_cutoff:]:
+            current_config = current_config.get_array()
+            config_distance += np.mean(np.abs(current_config - config_before))
+
+        return [delta_f, config_distance]
+
     # -------------------------------------------------------------------------
     # Action Functions
     # -------------------------------------------------------------------------
@@ -225,6 +247,16 @@ class RLSMAC(gym.Env):
         perf_star = self.bench.get_meta_information()["f_opt"]
         perf_hat = self.smac.solver.intensifier.traj_logger.trajectory[-1].train_perf
         return - np.abs(perf_hat - perf_star)
+
+    def rsaps_reward(self) -> float:
+        rh = self.smac.solver.runhistory.data
+        rh_step_cutoff = min(self.act_repeat, len(rh))
+        rh_vals = []
+        for key, val in rh.items():
+            rh_vals.append(val.cost)
+        f_localbest = np.min(rh_vals[-rh_step_cutoff:])
+        f_bsf = np.min(rh_vals[:-rh_step_cutoff])
+        return f_bsf- f_localbest
 
     # -------------------------------------------------------------------------
     # Util Functions

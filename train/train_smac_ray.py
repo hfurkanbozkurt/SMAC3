@@ -71,7 +71,7 @@ def setup_ray(args, env_choice):
         episode.custom_metrics["inc_perf"] = inc_perf
 
     h = args.horizon // args.act_repeat
-    ray_conf['hiddens'] = [100, 100]
+    ray_conf['hiddens'] = [50, 50]
     ray_conf['gamma'] = args.discount_factor
     ray_conf['lr'] = args.lr
     ray_conf['train_batch_size'] = h * 4
