@@ -17,19 +17,14 @@ from smac.scenario.scenario import Scenario
 class RLSMAC(gym.Env):
 
     def __init__(self,
-                 mode: str = "HPO",
-                 obs: List[str] = [
-                     "budget",
-                     "incumbent_changes",
-                     "not_improved_since",
-                     "incumbent_performance_prediction_error",
-                 ],
-                 act: str = "exploration_weight",
-                 rew: str = "incumbent_performance",
-                 bench: str = "camelback",
-                 horizon: int = 50,
-                 act_repeat: int = 5,
-                 verbose: str = "ERROR",
+                 obs,
+                 act,
+                 rew,
+                 bench,
+                 horizon,
+                 act_repeat=5,
+                 mode="HPO",
+                 verbose="ERROR",
                  **kwargs,
     ) -> None:
         self.mode = mode
@@ -43,17 +38,14 @@ class RLSMAC(gym.Env):
 
         self.mode = {"AC": SMAC4AC, "BO": SMAC4BO, "HPO": SMAC4HPO}[self.mode]
         self.bench = synthetic_benchmarks[self.bench]
+        self.f_opt = np.float32(self.bench.get_meta_information()["f_opt"])
         if not isinstance(self.obs, list):
             self.obs = [self.obs]
 
         # Define observation space and functions to retrieve observation
         observation_spaces = {
-            "budget": (self.get_budget, 1),
-            "incumbent_changes": (self.get_incumbent_changes, 1),
-            "not_improved_since": (self.get_not_improved_since, 1),
-            "incumbent_performance_prediction_error": (self.get_incumbent_performance_prediction_error, 1),
-            "rsaps": (self.get_rsaps, 2),
-            "rsaps_extended": (self.get_rsaps_extended, 5)
+            "classic": (self.get_classic, 4),
+            "rsaps": (self.get_rsaps, 5),
         }
         self.get_observation = [observation_spaces[obs][0] for obs in self.obs]
         self.observation_space = gym.spaces.Box(
@@ -75,6 +67,7 @@ class RLSMAC(gym.Env):
         # Define reward function
         reward_functions = {
             "incumbent_performance": self.incumbent_performance_reward,
+            "log_mean_regret": self.log_mean_regret_reward,
             "rsaps": self.rsaps_reward,
         }
         self.get_reward = reward_functions[self.rew]
@@ -94,7 +87,7 @@ class RLSMAC(gym.Env):
         self.done = (self.t >= self.horizon)
         self.reward = self.get_reward()
         self.info = {
-            "perf_*": np.float32(self.bench.get_meta_information()["f_opt"]),
+            "perf_*": self.f_opt,
             "perf_^": np.float32(
                 self.smac.solver.intensifier.traj_logger.trajectory[-1].train_perf),
             "t": self.t,
@@ -190,6 +183,14 @@ class RLSMAC(gym.Env):
 
         return error
 
+    def get_classic(self) -> float:
+        return np.hstack([
+            self.get_budget(),
+            self.get_incumbent_changes(),
+            self.get_not_improved_since(),
+            self.get_incumbent_performance_prediction_error(),
+        ])
+
     def get_rsaps(self) -> float:
         rh = self.smac.solver.runhistory.data
         rh_step_cutoff = min(self.act_repeat, len(rh))
@@ -208,16 +209,13 @@ class RLSMAC(gym.Env):
             current_config = current_config.get_array()
             config_distance += np.mean(np.abs(current_config - config_before))
 
-        return [delta_f, config_distance]
-
-    def get_rsaps_extended(self) -> float:
         best_config = self.smac.solver.intensifier.traj_logger.trajectory[-1]
         steps = self.smac.stats.ta_runs
         best_step = best_config.ta_runs
         num_dims = best_config.incumbent.get_array().size
-        rsaps_states = self.get_rsaps()
-        rsaps_states += [steps, best_step, num_dims]
-        return rsaps_states
+
+        return [delta_f, config_distance, steps, best_step, num_dims]
+
 
     # -------------------------------------------------------------------------
     # Action Functions
@@ -254,9 +252,16 @@ class RLSMAC(gym.Env):
     # Reward Functions
     # -------------------------------------------------------------------------
     def incumbent_performance_reward(self) -> float:
-        perf_star = self.bench.get_meta_information()["f_opt"]
         perf_hat = self.smac.solver.intensifier.traj_logger.trajectory[-1].train_perf
-        return - np.abs(perf_hat - perf_star)
+        return - np.abs(perf_hat - self.f_opt)
+
+    def log_mean_regret_reward(self) -> float:
+        rh = self.smac.solver.runhistory.data
+        log_regrets = []
+        for val in list(rh.values())[-min(self.act_repeat, len(rh)):]:
+            regret = -np.log10(np.abs(val.cost - self.f_opt))
+            log_regrets.append(regret)
+        return np.mean(log_regrets)
 
     def rsaps_reward(self) -> float:
         rh = self.smac.solver.runhistory.data
