@@ -4,9 +4,9 @@
 #SBATCH -t 7-00:00
 #SBATCH -c 2
 #SBATCH -a 1-16
-#SBATCH -D /home/bozkurth/git/thesis/SMAC3/train/rsaps/exp_log
-#SBATCH -o /home/bozkurth/git/thesis/SMAC3/train/rsaps/exp_log/%x.%N.%A.%a.out
-#SBATCH -e /home/bozkurth/git/thesis/SMAC3/train/rsaps/exp_log/%x.%N.%A.%aerr
+#SBATCH -D /home/bozkurth/git/thesis/SMAC3/train/rsaps_extended/exp_log
+#SBATCH -o /home/bozkurth/git/thesis/SMAC3/train/rsaps_extended/exp_log/%x.%N.%A.%a.out
+#SBATCH -e /home/bozkurth/git/thesis/SMAC3/train/rsaps_extended/exp_log/%x.%N.%A.%aerr
 #SBATCH --mail-type=END,FAIL
 
 source activate the
@@ -15,7 +15,7 @@ if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench camelback \
@@ -29,7 +29,7 @@ if [ 2 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench camelback \
@@ -43,7 +43,7 @@ if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench camelback \
@@ -57,7 +57,7 @@ if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench camelback \
@@ -68,7 +68,7 @@ if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench goldsteinprice \
@@ -82,7 +82,7 @@ if [ 6 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench goldsteinprice \
@@ -96,7 +96,7 @@ if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench goldsteinprice \
@@ -110,7 +110,7 @@ if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench goldsteinprice \
@@ -121,7 +121,7 @@ if [ 9 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann3 \
@@ -135,7 +135,7 @@ if [ 10 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann3 \
@@ -149,7 +149,7 @@ if [ 11 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann3 \
@@ -163,7 +163,7 @@ if [ 12 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann3 \
@@ -174,7 +174,7 @@ if [ 13 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann6 \
@@ -188,7 +188,7 @@ if [ 14 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann6 \
@@ -202,7 +202,7 @@ if [ 15 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann6 \
@@ -216,7 +216,7 @@ if [ 16 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --num_episodes 1000 \
         --horizon 75 \
-        --obs rsaps \
+        --obs rsaps_extended \
         --act exploration_weight \
         --rew rsaps \
         --bench hartmann6 \

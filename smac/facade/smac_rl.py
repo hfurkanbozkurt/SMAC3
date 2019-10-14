@@ -53,6 +53,7 @@ class RLSMAC(gym.Env):
             "not_improved_since": (self.get_not_improved_since, 1),
             "incumbent_performance_prediction_error": (self.get_incumbent_performance_prediction_error, 1),
             "rsaps": (self.get_rsaps, 2),
+            "rsaps_extended": (self.get_rsaps_extended, 5)
         }
         self.get_observation = [observation_spaces[obs][0] for obs in self.obs]
         self.observation_space = gym.spaces.Box(
@@ -209,6 +210,15 @@ class RLSMAC(gym.Env):
 
         return [delta_f, config_distance]
 
+    def get_rsaps_extended(self) -> float:
+        best_config = self.smac.solver.intensifier.traj_logger.trajectory[-1]
+        steps = self.smac.stats.ta_runs
+        best_step = best_config.ta_runs
+        num_dims = best_config.incumbent.get_array().size
+        rsaps_states = self.get_rsaps()
+        rsaps_states += [steps, best_step, num_dims]
+        return rsaps_states
+
     # -------------------------------------------------------------------------
     # Action Functions
     # -------------------------------------------------------------------------
@@ -252,7 +262,7 @@ class RLSMAC(gym.Env):
         rh = self.smac.solver.runhistory.data
         rh_step_cutoff = min(self.act_repeat, len(rh))
         rh_vals = []
-        for key, val in rh.items():
+        for _, val in rh.items():
             rh_vals.append(val.cost)
         f_localbest = np.min(rh_vals[-rh_step_cutoff:])
         f_bsf = np.min(rh_vals[:-rh_step_cutoff])
