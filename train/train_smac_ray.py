@@ -88,25 +88,29 @@ def setup_ray(args, env_choice):
     ray_conf['horizon'] = h + 1
     ray_conf['evaluation_interval'] = 10
     ray_conf['evaluation_num_episodes'] = 1
+    ray_conf['log_level'] = 'ERROR'
     ray_conf['callbacks'] = {
         "on_episode_end": function(on_episode_end)
     }
     return ray_conf, test_stats
 
 
-def ray_dqn_learn(num_eps, agent, c_freq=10):
+def ray_dqn_learn(num_eps, agent, c_freq, c_dir):
     total_eps = 0
     rewards = []
     inc_perfs = []
     while total_eps <= num_eps:
-        print("{}/{}".format(total_eps, num_eps))
         train_result = agent.train()
+        print("{}/{}: {}".format(total_eps, num_eps, train_result["episode_reward_mean"]))
         total_eps += train_result['episodes_this_iter']
         rewards.append(train_result["episode_reward_mean"])
         inc_perfs.append(train_result["custom_metrics"]["inc_perf_mean"])
         if total_eps % c_freq == 0:
             pprint(train_result)
-            agent.save()
+            checkpoint = agent.save(checkpoint_dir=c_dir)
+            print("Checkpoint saved at", checkpoint)
+    checkpoint = agent.save(checkpoint_dir=c_dir)
+    print("Last checkpoint saved at", checkpoint)
     stats = {"rewards": rewards, "inc_perfs": inc_perfs}
     return stats
 

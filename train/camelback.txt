@@ -3,7 +3,7 @@
 #SBATCH --mem 32000
 #SBATCH -t 7-00:00
 #SBATCH -c 1
-#SBATCH -a 1-24
+#SBATCH -a 1-16
 #SBATCH -D /home/bozkurth/git/thesis/SMAC3/train/final
 #SBATCH -o /home/bozkurth/git/thesis/SMAC3/train/final/log/%x.%N.%A.%a.out
 #SBATCH -e /home/bozkurth/git/thesis/SMAC3/train/final/log/%x.%N.%A.%a.err
@@ -14,10 +14,12 @@ source activate the
 if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.01 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-rsaps-camelback \
         --obs rsaps \
         --act acquisition_func \
         --rew rsaps \
@@ -30,10 +32,12 @@ fi
 if [ 2 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.001 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-rsaps-camelback \
         --obs rsaps \
         --act acquisition_func \
         --rew rsaps \
@@ -45,14 +49,16 @@ fi
 
 if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
+        --agent deep_q \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-log_mean_regret-camelback \
         --obs rsaps \
         --act acquisition_func \
-        --rew rsaps \
+        --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -62,10 +68,12 @@ fi
 if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 0.01 \
-        --num_checkpoints 10 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-log_mean_regret-camelback \
         --obs rsaps \
         --act acquisition_func \
         --rew log_mean_regret \
@@ -78,13 +86,15 @@ fi
 if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 0.001 \
-        --num_checkpoints 10 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-rsaps-camelback \
         --obs rsaps \
-        --act acquisition_func \
-        --rew log_mean_regret \
+        --act exploration_weight \
+        --rew rsaps \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -93,14 +103,16 @@ fi
 
 if [ 6 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
+        --agent deep_q \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-rsaps-camelback \
         --obs rsaps \
-        --act acquisition_func \
-        --rew log_mean_regret \
+        --act exploration_weight \
+        --rew rsaps \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -110,13 +122,15 @@ fi
 if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.01 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-log_mean_regret-camelback \
         --obs rsaps \
         --act exploration_weight \
-        --rew rsaps \
+        --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -126,13 +140,15 @@ fi
 if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.001 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-log_mean_regret-camelback \
         --obs rsaps \
         --act exploration_weight \
-        --rew rsaps \
+        --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -141,13 +157,15 @@ fi
 
 if [ 9 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
+        --agent deep_q \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
-        --obs rsaps \
-        --act exploration_weight \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-rsaps-camelback \
+        --obs classic \
+        --act acquisition_func \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -158,13 +176,15 @@ fi
 if [ 10 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 0.01 \
-        --num_checkpoints 10 \
-        --obs rsaps \
-        --act exploration_weight \
-        --rew log_mean_regret \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-rsaps-camelback \
+        --obs classic \
+        --act acquisition_func \
+        --rew rsaps \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -174,12 +194,14 @@ fi
 if [ 11 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 0.001 \
-        --num_checkpoints 10 \
-        --obs rsaps \
-        --act exploration_weight \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-log_mean_regret-camelback \
+        --obs classic \
+        --act acquisition_func \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -189,13 +211,15 @@ fi
 
 if [ 12 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
+        --agent deep_q \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
-        --obs rsaps \
-        --act exploration_weight \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-log_mean_regret-camelback \
+        --obs classic \
+        --act acquisition_func \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -206,12 +230,14 @@ fi
 if [ 13 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.01 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-rsaps-camelback \
         --obs classic \
-        --act acquisition_func \
+        --act exploration_weight \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -222,12 +248,14 @@ fi
 if [ 14 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.001 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-rsaps-camelback \
         --obs classic \
-        --act acquisition_func \
+        --act exploration_weight \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -237,14 +265,16 @@ fi
 
 if [ 15 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
+        --agent deep_q \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-log_mean_regret-camelback \
         --obs classic \
-        --act acquisition_func \
-        --rew rsaps \
+        --act exploration_weight \
+        --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
         --act_repeat 5
@@ -254,138 +284,12 @@ fi
 if [ 16 -eq $SLURM_ARRAY_TASK_ID ]; then
     python ~/git/thesis/SMAC3/train/train_smac.py \
         --agent deep_q \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 0.01 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act acquisition_func \
-        --rew log_mean_regret \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 17 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent deep_q \
-        --num_episodes 1000 \
+        --num_episodes 10 \
+        --eval_num_episodes 10\
         --eps_decay_starts 1000 \
         --lr 0.001 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act acquisition_func \
-        --rew log_mean_regret \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 18 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act acquisition_func \
-        --rew log_mean_regret \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 19 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent deep_q \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 0.01 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act exploration_weight \
-        --rew rsaps \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 20 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent deep_q \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 0.001 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act exploration_weight \
-        --rew rsaps \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 21 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act exploration_weight \
-        --rew rsaps \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 22 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent deep_q \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 0.01 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act exploration_weight \
-        --rew log_mean_regret \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 23 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent deep_q \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 0.001 \
-        --num_checkpoints 10 \
-        --obs classic \
-        --act exploration_weight \
-        --rew log_mean_regret \
-        --bench camelback \
-        --horizon 75 \
-        --act_repeat 5
-    exit $?
-fi
-
-if [ 24 -eq $SLURM_ARRAY_TASK_ID ]; then
-    python ~/git/thesis/SMAC3/train/train_smac.py \
-        --agent random \
-        --num_episodes 1000 \
-        --eps_decay_starts 1000 \
-        --lr 1.0 \
-        --num_checkpoints 10 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-log_mean_regret-camelback \
         --obs classic \
         --act exploration_weight \
         --rew log_mean_regret \

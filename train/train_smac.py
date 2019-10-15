@@ -252,6 +252,10 @@ if __name__ == "__main__":
                         help='Number of episodes to roll out',
                         required=True,
                         type=int)
+    parser.add_argument('--eval_num_episodes',
+                        help='Number of evaluation episodes to roll out',
+                        required=True,
+                        type=int)
     parser.add_argument('--epsilon',
                         default=0.1,
                         help='Epsilon',
@@ -275,6 +279,13 @@ if __name__ == "__main__":
                         default=0.99,
                         help='Discount Factor',
                         type=float)
+    parser.add_argument('--c_freq',
+                        help='Checkpoint frequency',
+                        default=100,
+                        required=False,
+                        type=int)
+    parser.add_argument('--c_dir',
+                        help='Checkpoint directory')
     parser.add_argument('--num_checkpoints',
                         help='Number of checkpoints',
                         default=1,
@@ -327,15 +338,57 @@ if __name__ == "__main__":
             **agent_config,
         )
     elif args.agent == "deep_q":
+        if not os.path.exists(args.c_dir):
+            os.makedirs(args.c_dir)
+        log_creator = lambda config: UnifiedLogger(
+            config,
+            args.c_dir
+        )
+
         conf, stats = setup_ray(args, RLSMAC)
-        log_creator = partial(logger_creator, model='DQN', adp="rlsmac", seed=args.seed)
         conf['env_config'] = env_config
         pprint(conf)
+
         agent = ray_dqn.DQNAgent(config=conf, env='smac_env', logger_creator=log_creator)
-        stats = ray_dqn_learn(args.num_episodes, agent, c_freq=(args.num_episodes - 1)//args.num_checkpoints)
-        agent.save()
-        with open(fn, 'wb') as fh:
-            pickle.dump(stats, fh)
+        checkpoints = sorted(glob.glob(os.path.join(args.c_dir, "checkpoint*")), key=lambda x: int(x.split("_")[-1]))
+        if checkpoints:
+            pprint(checkpoints)
+            ch = checkpoints[-1]
+            ch = os.path.join(ch, ch.split("/")[-1].replace("_", "-"))
+            agent.restore(ch)
+            print(f"Restored the agent from {ch}.")
+            ch_step = int(ch.split("checkpoint-")[-1])
+            args.num_episodes -= ch_step
+            print(f"Starting the training from step {ch_step} and continue for {args.num_episodes}.")
+
+        train_stats = ray_dqn_learn(args.num_episodes, agent, c_freq=args.c_freq, c_dir=args.c_dir)
+        with open(os.path.join(args.c_dir, "train_stats.pkl"), 'wb') as fh:
+            pickle.dump(train_stats, fh)
+
+        env = RLSMAC.env_creator(env_config)
+        rewards = np.array([0.0 for _ in range(args.eval_num_episodes)])
+        inc_perfs = np.array([None for _ in range(args.eval_num_episodes)])
+        actions = [[] for _ in range(args.eval_num_episodes)]
+        for i in range(args.eval_num_episodes):
+            ob = env.reset()
+            while True:
+                act = agent.compute_action(ob)
+                ob, r, done, info = env.step(act)
+                rewards[i] += r
+                inc_perfs[i] = info["perf_^"]
+                actions[i].append(act)
+                if done:
+                    break
+            print(f"eval_agent_on_env: Episode {i}/{args.eval_num_episodes}: rew: {rewards[i]}, inc_perf: {inc_perfs[i]}, actions: {actions[i]}")
+
+        test_stats = {
+            "rewards": rewards,
+            "inc_perfs": inc_perfs,
+            "actions": np.array(actions),
+            "config": env_config
+        }
+        with open(os.path.join(args.c_dir, "test_stats.pkl"), 'wb') as fh:
+            pickle.dump(test_stats, fh)
     elif args.agent == "default_smac":
         env = RLSMAC.env_creator(env_config)
         rewards = []
