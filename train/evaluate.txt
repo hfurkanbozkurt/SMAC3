@@ -1,0 +1,236 @@
+#!/bin/bash
+#SBATCH -p bosch_cpu-cascadelake
+#SBATCH --mem 32000
+#SBATCH -t 0-02:00
+#SBATCH -c 1
+#SBATCH -a 1-16
+#SBATCH -D /home/bozkurth/git/thesis/SMAC3/train/final
+#SBATCH -o /home/bozkurth/git/thesis/SMAC3/train/final/log/%x.%N.%A.%a.out
+#SBATCH -e /home/bozkurth/git/thesis/SMAC3/train/final/log/%x.%N.%A.%a.err
+#SBATCH --mail-type=END,FAIL
+
+source activate the
+
+if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-rsaps-camelback \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew rsaps \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 2 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-rsaps-goldsteinprice \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew rsaps \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-rsaps-hartmann3 \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew rsaps \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-rsaps-hartmann6 \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew rsaps \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-log_mean_regret-camelback \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew log_mean_regret \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 6 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-log_mean_regret-goldsteinprice \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew log_mean_regret \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-log_mean_regret-hartmann3 \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew log_mean_regret \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-acquisition_func-log_mean_regret-hartmann6 \
+        --obs rsaps \
+        --act acquisition_func \
+        --rew log_mean_regret \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 9 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-rsaps-camelback \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew rsaps \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 10 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-rsaps-goldsteinprice \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew rsaps \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 11 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-rsaps-hartmann3 \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew rsaps \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 12 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-rsaps-hartmann6 \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew rsaps \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 13 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-log_mean_regret-camelback \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew log_mean_regret \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 14 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-log_mean_regret-goldsteinprice \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew log_mean_regret \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 15 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-log_mean_regret-hartmann3 \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew log_mean_regret \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 16 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent random \
+        --eval_num_episodes 100 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/random-exploration_weight-log_mean_regret-hartmann6 \
+        --obs rsaps \
+        --act exploration_weight \
+        --rew log_mean_regret \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi

@@ -250,11 +250,11 @@ if __name__ == "__main__":
                         default="tabular_q")
     parser.add_argument('--num_episodes',
                         help='Number of episodes to roll out',
-                        required=True,
+                        required=False,
                         type=int)
     parser.add_argument('--eval_num_episodes',
                         help='Number of evaluation episodes to roll out',
-                        required=True,
+                        required=False,
                         type=int)
     parser.add_argument('--epsilon',
                         default=0.1,
@@ -362,7 +362,7 @@ if __name__ == "__main__":
             print(f"Starting the training from step {ch_step} and continue for {args.num_episodes}.")
 
         train_stats = ray_dqn_learn(args.num_episodes, agent, c_freq=args.c_freq, c_dir=args.c_dir)
-        with open(os.path.join(args.c_dir, "train_stats.pkl"), 'wb') as fh:
+        with open(os.path.join(args.c_dir, f"train_stats_{t}.pkl"), 'wb') as fh:
             pickle.dump(train_stats, fh)
 
         env = RLSMAC.env_creator(env_config)
@@ -379,7 +379,7 @@ if __name__ == "__main__":
                 actions[i].append(act)
                 if done:
                     break
-            print(f"eval_agent_on_env: Episode {i}/{args.eval_num_episodes}: rew: {rewards[i]}, inc_perf: {inc_perfs[i]}, actions: {actions[i]}")
+            print(f"eval_agent_on_env: Episode {i+1}/{args.eval_num_episodes}: rew: {rewards[i]}, inc_perf: {inc_perfs[i]}, actions: {actions[i]}")
 
         test_stats = {
             "rewards": rewards,
@@ -387,43 +387,54 @@ if __name__ == "__main__":
             "actions": np.array(actions),
             "config": env_config
         }
-        with open(os.path.join(args.c_dir, "test_stats.pkl"), 'wb') as fh:
+        with open(os.path.join(args.c_dir, f"test_stats_{t}.pkl"), 'wb') as fh:
             pickle.dump(test_stats, fh)
     elif args.agent == "default_smac":
+        if not os.path.exists(args.c_dir):
+            os.makedirs(args.c_dir)
         env = RLSMAC.env_creator(env_config)
-        rewards = []
-        inc_perfs = []
-        for i in range(args.num_episodes):
-            rew = 0.0
-            inc_perf = 0.0
-            ob = env.reset_to_default()
+        rewards = np.array([0.0 for _ in range(args.eval_num_episodes)])
+        inc_perfs = np.array([None for _ in range(args.eval_num_episodes)])
+        for i in range(args.eval_num_episodes):
+            _ = env.reset_to_default()
             while True:
-                ob, r, done, info = env.step(0)
-                rew += r
-                inc_perf = info["perf_^"]
+                _, r, done, info = env.step(0)
+                rewards[i] += r
+                inc_perfs[i] = info["perf_^"]
                 if done:
                     break
-            rewards.append(rew)
-            inc_perfs.append(inc_perf)
-        stats = {"rewards": rewards, "inc_perfs": inc_perfs}
-        with open(fn, 'wb') as fh:
-            pickle.dump(stats, fh)
+            print(f"eval_agent_on_env: Episode {i+1}/{args.eval_num_episodes}: rew: {rewards[i]}, inc_perf: {inc_perfs[i]}")
+
+        test_stats = {
+            "rewards": rewards,
+            "inc_perfs": inc_perfs,
+            "actions": [],
+            "config": env_config
+        }
+        with open(os.path.join(args.c_dir, f"test_stats_{t}.pkl"), 'wb') as fh:
+            pickle.dump(test_stats, fh)
     elif args.agent == "random":
+        if not os.path.exists(args.c_dir):
+            os.makedirs(args.c_dir)
         env = RLSMAC.env_creator(env_config)
-        rewards = []
-        inc_perfs = []
-        for i in range(args.num_episodes):
-            rew = 0.0
-            inc_perf = 0.0
-            ob = env.reset()
+        rewards = np.array([0.0 for _ in range(args.eval_num_episodes)])
+        inc_perfs = np.array([None for _ in range(args.eval_num_episodes)])
+        for i in range(args.eval_num_episodes):
+            _ = env.reset()
             while True:
-                ob, r, done, info = env.step(env.action_space.sample())
-                rew += r
-                inc_perf = info["perf_^"]
+                _, r, done, info = env.step(env.action_space.sample())
+                rewards[i] += r
+                inc_perfs[i] = info["perf_^"]
                 if done:
                     break
-            rewards.append(rew)
-            inc_perfs.append(inc_perf)
-        stats = {"rewards": rewards, "inc_perfs": inc_perfs}
-        with open(fn, 'wb') as fh:
-            pickle.dump(stats, fh)
+            print(f"eval_agent_on_env: Episode {i+1}/{args.eval_num_episodes}: rew: {rewards[i]}, inc_perf: {inc_perfs[i]}")
+
+        test_stats = {
+            "rewards": rewards,
+            "inc_perfs": inc_perfs,
+            "actions": [],
+            "config": env_config
+        }
+        with open(os.path.join(args.c_dir, f"test_stats_{t}.pkl"), 'wb') as fh:
+            pickle.dump(test_stats, fh)
+

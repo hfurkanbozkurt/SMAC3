@@ -127,7 +127,6 @@ class RLSMAC(gym.Env):
     def reset_to_default(self):
         # We initialize solver and start it manually, i.e., run initial design
         kwargs = self.modify_kwargs(self.kwargs)
-        # We use LCB so that actions do not change anything.
         self.smac = self.mode(**kwargs)
         self.smac.solver.start()
         self.t = 0
