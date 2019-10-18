@@ -392,13 +392,14 @@ if __name__ == "__main__":
     elif args.agent == "default_smac":
         if not os.path.exists(args.c_dir):
             os.makedirs(args.c_dir)
+        env_config["default_smac"] = True
         env = RLSMAC.env_creator(env_config)
         rewards = np.array([0.0 for _ in range(args.eval_num_episodes)])
         inc_perfs = np.array([None for _ in range(args.eval_num_episodes)])
         for i in range(args.eval_num_episodes):
-            _ = env.reset_to_default()
+            _ = env.reset()
             while True:
-                _, r, done, info = env.step(0)
+                _, r, done, info = env.step(None)
                 rewards[i] += r
                 inc_perfs[i] = info["perf_^"]
                 if done:

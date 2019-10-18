@@ -25,6 +25,7 @@ class RLSMAC(gym.Env):
                  act_repeat=5,
                  mode="HPO",
                  verbose="ERROR",
+                 default_smac=False,
                  **kwargs,
     ) -> None:
         self.mode = mode
@@ -34,6 +35,7 @@ class RLSMAC(gym.Env):
         self.bench = bench
         self.horizon = horizon
         self.act_repeat = act_repeat
+        self.default_smac = default_smac
         self.kwargs = kwargs
 
         self.mode = {"AC": SMAC4AC, "BO": SMAC4BO, "HPO": SMAC4HPO}[self.mode]
@@ -42,27 +44,28 @@ class RLSMAC(gym.Env):
         if not isinstance(self.obs, list):
             self.obs = [self.obs]
 
-        # Define observation space and functions to retrieve observation
-        observation_spaces = {
-            "classic": (self.get_classic, 4),
-            "rsaps": (self.get_rsaps, 5),
-        }
-        self.get_observation = [observation_spaces[obs][0] for obs in self.obs]
-        self.observation_space = gym.spaces.Box(
-            -np.inf,
-            np.inf,
-            [sum([observation_spaces[obs][1] for obs in self.obs]),]
-        )
+        if not self.default_smac:
+            # Define observation space and functions to retrieve observation
+            observation_spaces = {
+                "classic": (self.get_classic, 4),
+                "rsaps": (self.get_rsaps, 5),
+            }
+            self.get_observation = [observation_spaces[obs][0] for obs in self.obs]
+            self.observation_space = gym.spaces.Box(
+                -np.inf,
+                np.inf,
+                [sum([observation_spaces[obs][1] for obs in self.obs]),]
+            )
 
-        # Define action space and functions to apply action
-        action_spaces = {
-            "binary_random_prob": (self.apply_binary_random_prob, 2),
-            "random_prob": (self.apply_random_prob, 21),
-            "acquisition_func": (self.apply_acquisition_func, 4),
-            "exploration_weight": (self.apply_exploration_weight, 20),
-        }
-        self.apply_action = action_spaces[self.act][0]
-        self.action_space = gym.spaces.Discrete(action_spaces[self.act][1])
+            # Define action space and functions to apply action
+            action_spaces = {
+                "binary_random_prob": (self.apply_binary_random_prob, 2),
+                "random_prob": (self.apply_random_prob, 21),
+                "acquisition_func": (self.apply_acquisition_func, 4),
+                "exploration_weight": (self.apply_exploration_weight, 20),
+            }
+            self.apply_action = action_spaces[self.act][0]
+            self.action_space = gym.spaces.Discrete(action_spaces[self.act][1])
 
         # Define reward function
         reward_functions = {
@@ -75,15 +78,18 @@ class RLSMAC(gym.Env):
         logging.getLogger().setLevel(verbose)
         self.num_resets = -1
         self.num_steps = 0
+        self.state = None
 
     def step(self, action: int) -> Tuple[np.ndarray, float, bool, Dict]:
         # Apply action
-        self.apply_action(action)
+        if not self.default_smac:
+            self.apply_action(action)
         self.smac.solver.run_step(num_steps=self.act_repeat)
         self.t += self.act_repeat
 
         # Retrieve response
-        self.state = np.hstack([get_obs() for get_obs in self.get_observation])
+        if not self.default_smac:
+            self.state = np.hstack([get_obs() for get_obs in self.get_observation])
         self.done = (self.t >= self.horizon)
         self.reward = self.get_reward()
         self.info = {
@@ -105,7 +111,8 @@ class RLSMAC(gym.Env):
         # budget in terms of number of steps.
         self.smac.solver.stats.is_budget_exhausted = lambda: False
 
-        self.state = np.hstack([get_obs() for get_obs in self.get_observation])
+        if not self.default_smac:
+            self.state = np.hstack([get_obs() for get_obs in self.get_observation])
         self.num_resets += 1
         self.num_steps = 0
         return self.state
@@ -120,24 +127,10 @@ class RLSMAC(gym.Env):
         scenario.output_dir = ""
         kwargs["scenario"] = scenario
         kwargs["tae_runner"] = self.bench()
-        if not self.act == "acquisition_func":
-            kwargs["acquisition_function"] = AdaptiveLCB
+        if not self.default_smac:
+            if not self.act == "acquisition_func":
+                kwargs["acquisition_function"] = AdaptiveLCB
         return kwargs
-
-    def reset_to_default(self):
-        # We initialize solver and start it manually, i.e., run initial design
-        kwargs = self.modify_kwargs(self.kwargs)
-        self.smac = self.mode(**kwargs)
-        self.smac.solver.start()
-        self.t = 0
-        # We do not want budget to exhaust, we want to use our own version of
-        # budget in terms of number of steps.
-        self.smac.solver.stats.is_budget_exhausted = lambda: False
-
-        self.state = []
-        self.num_resets += 1
-        self.num_steps = 0
-        return self.state
 
     def optimize(self) -> None:
         self.smac = self.mode(**self.modify_kwargs(self.kwargs))
