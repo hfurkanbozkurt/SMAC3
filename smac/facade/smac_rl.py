@@ -25,7 +25,7 @@ class RLSMAC(gym.Env):
                  act_repeat=5,
                  mode="HPO",
                  verbose="ERROR",
-                 default_smac="no",
+                 default_smac=False,
                  **kwargs,
     ) -> None:
         self.mode = mode
@@ -35,7 +35,8 @@ class RLSMAC(gym.Env):
         self.bench = bench
         self.horizon = horizon
         self.act_repeat = act_repeat
-        self.default_smac = default_smac == "yes"
+        self.default_smac = default_smac
+        self.verbose = verbose
         self.kwargs = kwargs
 
         self.mode = {"AC": SMAC4AC, "BO": SMAC4BO, "HPO": SMAC4HPO}[self.mode]
@@ -76,7 +77,7 @@ class RLSMAC(gym.Env):
         }
         self.get_reward = reward_functions[self.rew]
 
-        logging.getLogger().setLevel(verbose)
+        logging.getLogger().setLevel(self.verbose)
         self.num_resets = -1
         self.num_steps = 0
         self.state = None
@@ -99,7 +100,8 @@ class RLSMAC(gym.Env):
                 self.smac.solver.intensifier.traj_logger.trajectory[-1].train_perf),
             "t": self.t,
         }
-        print(f"rew: {self.reward}, perf_^: {self.info['perf_^']}, perf_*: {self.info['perf_*']}")
+        if self.verbose == 'INFO':
+            print(f"rew: {self.reward}, perf_^: {self.info['perf_^']}, perf_*: {self.info['perf_*']}")
         self.num_steps += 1
         return self.state, self.reward, self.done, self.info
 
@@ -129,7 +131,7 @@ class RLSMAC(gym.Env):
         kwargs["scenario"] = scenario
         kwargs["tae_runner"] = self.bench()
         if not self.default_smac:
-            if not self.act == "acquisition_func":
+            if self.act == "exploration_weight":
                 kwargs["acquisition_function"] = AdaptiveLCB
         return kwargs
 
@@ -216,17 +218,20 @@ class RLSMAC(gym.Env):
     def apply_binary_random_prob(self, action: int) -> None:
         init_val = self.smac.solver.random_configuration_chooser.prob
         self.smac.solver.random_configuration_chooser.prob = float(action)
-        print(f"R/S: {self.num_resets}/{self.num_steps}, binary_random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
+        if self.verbose == 'INFO':
+            print(f"R/S: {self.num_resets}/{self.num_steps}, binary_random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
 
     def apply_random_prob_11(self, action: int) -> None:
         init_val = self.smac.solver.random_configuration_chooser.prob
         self.smac.solver.random_configuration_chooser.prob = action / 10.0
-        print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
+        if self.verbose == 'INFO':
+            print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
 
     def apply_random_prob_21(self, action: int) -> None:
         init_val = self.smac.solver.random_configuration_chooser.prob
         self.smac.solver.random_configuration_chooser.prob = action / 20.0
-        print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
+        if self.verbose == 'INFO':
+            print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
 
     def apply_acquisition_func(self, action: int) -> None:
         init_val = self.smac.solver.acquisition_func
@@ -239,12 +244,14 @@ class RLSMAC(gym.Env):
             self.smac.solver.acq_optimizer.local_search.acquisition_function = acquisition_function
         if hasattr(self.smac.solver.acq_optimizer, "random_search"):
             self.smac.solver.acq_optimizer.random_search.acquisition_function = acquisition_function
-        print(f"R/S: {self.num_resets}/{self.num_steps}, acquisition_func: {init_val} --> {self.smac.solver.acquisition_func}")
+        if self.verbose == 'INFO':
+            print(f"R/S: {self.num_resets}/{self.num_steps}, acquisition_func: {init_val} --> {self.smac.solver.acquisition_func}")
 
     def apply_exploration_weight(self, action: int) -> None:
         init_val = self.smac.solver.acquisition_func.exploration_weight
         self.smac.solver.acquisition_func._set_exploration_weight(action)
-        print(f"R/S: {self.num_resets}/{self.num_steps}, exploration_weight: {init_val} --> {self.smac.solver.acquisition_func.exploration_weight}")
+        if self.verbose == 'INFO':
+            print(f"R/S: {self.num_resets}/{self.num_steps}, exploration_weight: {init_val} --> {self.smac.solver.acquisition_func.exploration_weight}")
 
     # -------------------------------------------------------------------------
     # Reward Functions
@@ -283,7 +290,7 @@ class RLSMAC(gym.Env):
         parser.add_argument("--obs",
                             nargs="+",
                             type=str,
-                            default=["budget", "incumbent_changes", "not_improved_since", "incumbent_performance_prediction_error"])
+                            default="classic")
         parser.add_argument("--act",
                             type=str,
                             default="exploration_weight")
@@ -303,10 +310,6 @@ class RLSMAC(gym.Env):
                             type=str,
                             choices=["ERROR", "INFO", "DEBUG"],
                             default="ERROR")
-        parser.add_argument("--default_smac",
-                            type=str,
-                            choices=["yes", "no"],
-                            default="no")
         return parser
 
     @staticmethod
@@ -320,7 +323,6 @@ class RLSMAC(gym.Env):
             "horizon": args.horizon,
             "act_repeat": args.act_repeat,
             "verbose": args.verbose,
-            "default_smac": args.default_smac,
         }
         return config
 
