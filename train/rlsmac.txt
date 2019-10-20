@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH -p bosch_cpu-cascadelake
+#SBATCH -p cpu_ivy
 #SBATCH --mem 32000
-#SBATCH -t 0-02:00
+#SBATCH -t 7-00:00
 #SBATCH -c 1
-#SBATCH -a 1-64
+#SBATCH -a 1-96
 #SBATCH -D /home/bozkurth/git/thesis/SMAC3/train/final
 #SBATCH -o /home/bozkurth/git/thesis/SMAC3/train/final/log/%x.%N.%A.%a.out
 #SBATCH -e /home/bozkurth/git/thesis/SMAC3/train/final/log/%x.%N.%A.%a.err
@@ -19,9 +19,9 @@ if [ 1 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-rsaps-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-rsaps-camelback \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -37,9 +37,9 @@ if [ 2 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-rsaps-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-rsaps-goldsteinprice \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -55,9 +55,9 @@ if [ 3 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-rsaps-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-rsaps-hartmann3 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -73,9 +73,9 @@ if [ 4 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-rsaps-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-rsaps-hartmann6 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -91,9 +91,9 @@ if [ 5 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-rsaps-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-rsaps-camelback \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -109,9 +109,9 @@ if [ 6 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-rsaps-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-rsaps-goldsteinprice \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -127,9 +127,9 @@ if [ 7 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-rsaps-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-rsaps-hartmann3 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -145,9 +145,9 @@ if [ 8 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-rsaps-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-rsaps-hartmann6 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -163,9 +163,9 @@ if [ 9 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-log_mean_regret-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-log_mean_regret-camelback \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -181,9 +181,9 @@ if [ 10 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-log_mean_regret-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-log_mean_regret-goldsteinprice \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -199,9 +199,9 @@ if [ 11 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-log_mean_regret-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-log_mean_regret-hartmann3 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -217,9 +217,9 @@ if [ 12 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-acquisition_func-log_mean_regret-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-binary_random_prob-log_mean_regret-hartmann6 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -235,9 +235,9 @@ if [ 13 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-log_mean_regret-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-log_mean_regret-camelback \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -253,9 +253,9 @@ if [ 14 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-log_mean_regret-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-log_mean_regret-goldsteinprice \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -271,9 +271,9 @@ if [ 15 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-log_mean_regret-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-log_mean_regret-hartmann3 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -289,9 +289,9 @@ if [ 16 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-acquisition_func-log_mean_regret-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-binary_random_prob-log_mean_regret-hartmann6 \
         --obs rsaps \
-        --act acquisition_func \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -307,9 +307,9 @@ if [ 17 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-rsaps-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-rsaps-camelback \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -325,9 +325,9 @@ if [ 18 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-rsaps-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-rsaps-goldsteinprice \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -343,9 +343,9 @@ if [ 19 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-rsaps-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-rsaps-hartmann3 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -361,9 +361,9 @@ if [ 20 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-rsaps-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-rsaps-hartmann6 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -379,9 +379,9 @@ if [ 21 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-rsaps-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-rsaps-camelback \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -397,9 +397,9 @@ if [ 22 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-rsaps-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-rsaps-goldsteinprice \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -415,9 +415,9 @@ if [ 23 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-rsaps-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-rsaps-hartmann3 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -433,9 +433,9 @@ if [ 24 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-rsaps-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-rsaps-hartmann6 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -451,9 +451,9 @@ if [ 25 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-log_mean_regret-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-log_mean_regret-camelback \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -469,9 +469,9 @@ if [ 26 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-log_mean_regret-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-log_mean_regret-goldsteinprice \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -487,9 +487,9 @@ if [ 27 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-log_mean_regret-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-log_mean_regret-hartmann3 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -505,9 +505,9 @@ if [ 28 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-exploration_weight-log_mean_regret-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_11-log_mean_regret-hartmann6 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -523,9 +523,9 @@ if [ 29 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-log_mean_regret-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-log_mean_regret-camelback \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -541,9 +541,9 @@ if [ 30 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-log_mean_regret-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-log_mean_regret-goldsteinprice \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -559,9 +559,9 @@ if [ 31 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-log_mean_regret-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-log_mean_regret-hartmann3 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -577,9 +577,9 @@ if [ 32 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-exploration_weight-log_mean_regret-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_11-log_mean_regret-hartmann6 \
         --obs rsaps \
-        --act exploration_weight \
+        --act random_prob_11 \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -595,9 +595,9 @@ if [ 33 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-rsaps-camelback \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-rsaps-camelback \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -613,9 +613,9 @@ if [ 34 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-rsaps-goldsteinprice \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-rsaps-goldsteinprice \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -631,9 +631,9 @@ if [ 35 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-rsaps-hartmann3 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-rsaps-hartmann3 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -649,9 +649,9 @@ if [ 36 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-rsaps-hartmann6 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-rsaps-hartmann6 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -667,9 +667,9 @@ if [ 37 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-rsaps-camelback \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-rsaps-camelback \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -685,9 +685,9 @@ if [ 38 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-rsaps-goldsteinprice \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-rsaps-goldsteinprice \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -703,9 +703,9 @@ if [ 39 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-rsaps-hartmann3 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-rsaps-hartmann3 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -721,9 +721,9 @@ if [ 40 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-rsaps-hartmann6 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-rsaps-hartmann6 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -739,9 +739,9 @@ if [ 41 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-log_mean_regret-camelback \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-log_mean_regret-camelback \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -757,9 +757,9 @@ if [ 42 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-log_mean_regret-goldsteinprice \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-log_mean_regret-goldsteinprice \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -775,9 +775,9 @@ if [ 43 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-log_mean_regret-hartmann3 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-log_mean_regret-hartmann3 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -793,9 +793,9 @@ if [ 44 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-acquisition_func-log_mean_regret-hartmann6 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-rsaps-random_prob_21-log_mean_regret-hartmann6 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -811,9 +811,9 @@ if [ 45 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-log_mean_regret-camelback \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-log_mean_regret-camelback \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -829,9 +829,9 @@ if [ 46 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-log_mean_regret-goldsteinprice \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-log_mean_regret-goldsteinprice \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -847,9 +847,9 @@ if [ 47 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-log_mean_regret-hartmann3 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-log_mean_regret-hartmann3 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -865,9 +865,9 @@ if [ 48 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-acquisition_func-log_mean_regret-hartmann6 \
-        --obs classic \
-        --act acquisition_func \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-rsaps-random_prob_21-log_mean_regret-hartmann6 \
+        --obs rsaps \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -883,9 +883,9 @@ if [ 49 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-rsaps-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-rsaps-camelback \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -901,9 +901,9 @@ if [ 50 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-rsaps-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-rsaps-goldsteinprice \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -919,9 +919,9 @@ if [ 51 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-rsaps-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-rsaps-hartmann3 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -937,9 +937,9 @@ if [ 52 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-rsaps-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-rsaps-hartmann6 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -955,9 +955,9 @@ if [ 53 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-rsaps-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-rsaps-camelback \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench camelback \
         --horizon 75 \
@@ -973,9 +973,9 @@ if [ 54 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-rsaps-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-rsaps-goldsteinprice \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench goldsteinprice \
         --horizon 75 \
@@ -991,9 +991,9 @@ if [ 55 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-rsaps-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-rsaps-hartmann3 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann3 \
         --horizon 75 \
@@ -1009,9 +1009,9 @@ if [ 56 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-rsaps-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-rsaps-hartmann6 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew rsaps \
         --bench hartmann6 \
         --horizon 75 \
@@ -1027,9 +1027,9 @@ if [ 57 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-log_mean_regret-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-log_mean_regret-camelback \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -1045,9 +1045,9 @@ if [ 58 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-log_mean_regret-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-log_mean_regret-goldsteinprice \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -1063,9 +1063,9 @@ if [ 59 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-log_mean_regret-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-log_mean_regret-hartmann3 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -1081,9 +1081,9 @@ if [ 60 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.01 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-exploration_weight-log_mean_regret-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-binary_random_prob-log_mean_regret-hartmann6 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
@@ -1099,9 +1099,9 @@ if [ 61 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-log_mean_regret-camelback \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-log_mean_regret-camelback \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench camelback \
         --horizon 75 \
@@ -1117,9 +1117,9 @@ if [ 62 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-log_mean_regret-goldsteinprice \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-log_mean_regret-goldsteinprice \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench goldsteinprice \
         --horizon 75 \
@@ -1135,9 +1135,9 @@ if [ 63 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-log_mean_regret-hartmann3 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-log_mean_regret-hartmann3 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
         --rew log_mean_regret \
         --bench hartmann3 \
         --horizon 75 \
@@ -1153,9 +1153,585 @@ if [ 64 -eq $SLURM_ARRAY_TASK_ID ]; then
         --eps_decay_starts 1000 \
         --lr 0.001 \
         --c_freq 50 \
-        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-exploration_weight-log_mean_regret-hartmann6 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-binary_random_prob-log_mean_regret-hartmann6 \
         --obs classic \
-        --act exploration_weight \
+        --act binary_random_prob \
+        --rew log_mean_regret \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 65 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-rsaps-camelback \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 66 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-rsaps-goldsteinprice \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 67 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-rsaps-hartmann3 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 68 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-rsaps-hartmann6 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 69 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-rsaps-camelback \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 70 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-rsaps-goldsteinprice \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 71 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-rsaps-hartmann3 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 72 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-rsaps-hartmann6 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew rsaps \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 73 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-log_mean_regret-camelback \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 74 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-log_mean_regret-goldsteinprice \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 75 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-log_mean_regret-hartmann3 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 76 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_11-log_mean_regret-hartmann6 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 77 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-log_mean_regret-camelback \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 78 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-log_mean_regret-goldsteinprice \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 79 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-log_mean_regret-hartmann3 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 80 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_11-log_mean_regret-hartmann6 \
+        --obs classic \
+        --act random_prob_11 \
+        --rew log_mean_regret \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 81 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-rsaps-camelback \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 82 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-rsaps-goldsteinprice \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 83 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-rsaps-hartmann3 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 84 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-rsaps-hartmann6 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 85 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-rsaps-camelback \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 86 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-rsaps-goldsteinprice \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 87 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-rsaps-hartmann3 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 88 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-rsaps-hartmann6 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew rsaps \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 89 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-log_mean_regret-camelback \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 90 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-log_mean_regret-goldsteinprice \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 91 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-log_mean_regret-hartmann3 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 92 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.01 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.01-classic-random_prob_21-log_mean_regret-hartmann6 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench hartmann6 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 93 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-log_mean_regret-camelback \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench camelback \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 94 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-log_mean_regret-goldsteinprice \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench goldsteinprice \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 95 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-log_mean_regret-hartmann3 \
+        --obs classic \
+        --act random_prob_21 \
+        --rew log_mean_regret \
+        --bench hartmann3 \
+        --horizon 75 \
+        --act_repeat 5
+    exit $?
+fi
+
+if [ 96 -eq $SLURM_ARRAY_TASK_ID ]; then
+    python ~/git/thesis/SMAC3/train/train_smac.py \
+        --agent deep_q \
+        --num_episodes 1000 \
+        --eval_num_episodes 100 \
+        --eps_decay_starts 1000 \
+        --lr 0.001 \
+        --c_freq 50 \
+        --c_dir /home/bozkurth/git/thesis/SMAC3/train/final/deep_q-0.001-classic-random_prob_21-log_mean_regret-hartmann6 \
+        --obs classic \
+        --act random_prob_21 \
         --rew log_mean_regret \
         --bench hartmann6 \
         --horizon 75 \
