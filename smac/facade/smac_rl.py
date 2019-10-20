@@ -25,7 +25,7 @@ class RLSMAC(gym.Env):
                  act_repeat=5,
                  mode="HPO",
                  verbose="ERROR",
-                 default_smac=False,
+                 default_smac="no",
                  **kwargs,
     ) -> None:
         self.mode = mode
@@ -35,7 +35,7 @@ class RLSMAC(gym.Env):
         self.bench = bench
         self.horizon = horizon
         self.act_repeat = act_repeat
-        self.default_smac = default_smac
+        self.default_smac = default_smac == "yes"
         self.kwargs = kwargs
 
         self.mode = {"AC": SMAC4AC, "BO": SMAC4BO, "HPO": SMAC4HPO}[self.mode]
@@ -60,7 +60,8 @@ class RLSMAC(gym.Env):
             # Define action space and functions to apply action
             action_spaces = {
                 "binary_random_prob": (self.apply_binary_random_prob, 2),
-                "random_prob": (self.apply_random_prob, 21),
+                "random_prob_11": (self.apply_random_prob_11, 11),
+                "random_prob_21": (self.apply_random_prob_21, 21),
                 "acquisition_func": (self.apply_acquisition_func, 4),
                 "exploration_weight": (self.apply_exploration_weight, 20),
             }
@@ -217,7 +218,12 @@ class RLSMAC(gym.Env):
         self.smac.solver.random_configuration_chooser.prob = float(action)
         print(f"R/S: {self.num_resets}/{self.num_steps}, binary_random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
 
-    def apply_random_prob(self, action: int) -> None:
+    def apply_random_prob_11(self, action: int) -> None:
+        init_val = self.smac.solver.random_configuration_chooser.prob
+        self.smac.solver.random_configuration_chooser.prob = action / 10.0
+        print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
+
+    def apply_random_prob_21(self, action: int) -> None:
         init_val = self.smac.solver.random_configuration_chooser.prob
         self.smac.solver.random_configuration_chooser.prob = action / 20.0
         print(f"R/S: {self.num_resets}/{self.num_steps}, random_prob: {init_val} --> {self.smac.solver.random_configuration_chooser.prob}")
@@ -297,6 +303,10 @@ class RLSMAC(gym.Env):
                             type=str,
                             choices=["ERROR", "INFO", "DEBUG"],
                             default="ERROR")
+        parser.add_argument("--default_smac",
+                            type=str,
+                            choices=["yes", "no"],
+                            default="no")
         return parser
 
     @staticmethod
@@ -310,6 +320,7 @@ class RLSMAC(gym.Env):
             "horizon": args.horizon,
             "act_repeat": args.act_repeat,
             "verbose": args.verbose,
+            "default_smac": args.default_smac,
         }
         return config
 
